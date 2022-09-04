@@ -7,19 +7,23 @@ const refs = {
   searchBtn: document.querySelector('.search-btn'),
 };
 
-const KEY = '29711315-8270253fad608a552f88c48ec';
-const BASE_URL = 'https://pixabay.com/api';
-const URL = `${BASE_URL}/?key=${KEY}=cats&image_type&orientation=horizontal&safesearch=true`;
+function fetchData(data) {
+  const KEY = '29711315-8270253fad608a552f88c48ec';
+  const BASE_URL = 'https://pixabay.com/api';
+  const URL = `${BASE_URL}/?key=${KEY}&q=${data}&image_type&orientation=horizontal&safesearch=true`;
 
-fetch(URL)
-  .then(responce => responce.json().then(data => console.log(data)))
-  .catch(error => console.log(error));
+  return fetch(URL).then(responce => responce.json());
+}
 
-// refs.input.addEventListener('input', enterData);
+refs.input.addEventListener('input', searchInfo);
 
-// function enterData(e) {
-//   e.preventDefault();
+function searchInfo(e) {
+  e.preventDefault();
 
-//   const inputData = refs.input.value;
-//   fetchUserData(inputData);
-// }
+  const inputData = refs.input.value;
+  console.log(inputData);
+
+  fetchData(inputData)
+    .then(data => console.log(data))
+    .catch(error => console.log(error));
+}
