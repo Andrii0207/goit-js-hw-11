@@ -5,6 +5,7 @@ const refs = {
   form: document.querySelector('#search-form'),
   input: document.querySelector('.search-input'),
   searchBtn: document.querySelector('.search-btn'),
+  gallery: document.querySelector(".gallery")
 };
 
 function fetchData(data) {
@@ -21,9 +22,78 @@ function searchInfo(e) {
   e.preventDefault();
 
   const inputData = refs.input.value;
-  console.log(inputData);
+  // console.log(inputData);
 
   fetchData(inputData)
-    .then(data => console.log(data))
-    .catch(error => console.log(error));
+    .then(renderData, data => console.log(data))
+    .catch(error => {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+    });
 }
+
+function renderData(inputData) {
+  console.log(inputData)
+
+  // const renderCard = data.reduce((acc, item) => acc + createDataCard(inputData));
+  const renderCard = createDataCard(inputData)
+
+  refs.gallery.innerHTML = renderCard;
+
+
+}
+
+function createDataCard({ webformatURL, tags, likes, views, comments, downloads}) {
+console.log(data)
+
+ return `<div class="photo-card">
+ <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+ <div class="info">
+   <p class="info-item">
+     <b>Likes</b>
+     ${likes}
+   </p>
+   <p class="info-item">
+     <b>Views</b>
+     ${views}
+   </p>
+   <p class="info-item">
+     <b>Comments</b>
+     ${comments}
+   </p>
+   <p class="info-item">
+     <b>Downloads</b>
+     ${downloads}
+   </p>
+ </div>
+</div>`
+
+
+}
+
+// function createDataCards({ webformatURL, views, comments, downloads }) {
+//   return `<div class="gallery">
+//     <div class="photo-card">
+//       <img src="${webformatURL}" alt="" loading="lazy" />
+//       <div class="info">
+//         <p class="info-item">
+//           <b>Likes</b>
+//           ${likes}
+//         </p>
+//         <p class="info-item">
+//           <b>Views</b>
+//           ${views}
+//         </p>
+//         <p class="info-item">
+//           <b>Comments</b>
+//           ${comments}
+//         </p>
+//         <p class="info-item">
+//           <b>Downloads</b>
+//           ${downloads}
+//         </p>
+//       </div>
+//     </div>
+//   </div>`;
+// }
