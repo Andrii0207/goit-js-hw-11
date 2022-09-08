@@ -20,12 +20,13 @@ refs.input.addEventListener('input', searchInfo);
 
 function searchInfo(e) {
   e.preventDefault();
+  console.log(e)
 
-  const inputData = refs.input.value;
-  // console.log(inputData);
-
-  fetchData(inputData)
-    .then(renderData, data => console.log(data))
+  const value = e.target.value.toLowerCase().trim();
+    
+  fetchData(value)
+    .then(renderCards)
+    .then(data => console.log(data))
     .catch(error => {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.',
@@ -33,44 +34,93 @@ function searchInfo(e) {
     });
 }
 
-function renderData(inputData) {
-  console.log(inputData)
-
-  // const renderCard = data.reduce((acc, item) => acc + createDataCard(inputData));
-  const renderCard = createDataCard(inputData)
-
-  refs.gallery.innerHTML = renderCard;
 
 
-}
-
-function createDataCard({ webformatURL, tags, likes, views, comments, downloads}) {
-console.log(data)
-
- return `<div class="photo-card">
- <img src="${webformatURL}" alt="${tags}" loading="lazy" />
- <div class="info">
-   <p class="info-item">
-     <b>Likes</b>
-     ${likes}
-   </p>
-   <p class="info-item">
-     <b>Views</b>
-     ${views}
-   </p>
-   <p class="info-item">
-     <b>Comments</b>
-     ${comments}
-   </p>
-   <p class="info-item">
-     <b>Downloads</b>
-     ${downloads}
-   </p>
- </div>
-</div>`
 
 
-}
+function renderCards(data) {
+  console.log(data)
+
+const onMarkUp = data.map(({webformatURL, tags, likes, views, comments, downloads}) =>
+`<div class="photo-card">
+<img src="${webformatURL}" alt="${tags}" loading="lazy" />
+<div class="info">
+  <p class="info-item">
+    <b>Likes</b>${likes}
+  </p>
+  <p class="info-item">
+    <b>Views</b>${views}
+  </p>
+  <p class="info-item">
+    <b>Comments</b>${comments}
+  </p>
+  <p class="info-item">
+    <b>Downloads</b>${downloads}
+  </p>
+</div>
+</div>`, "").join("")
+
+refs.gallery.insertAdjacentHTML("beforeend", onMarkUp);
+ }
+
+
+// function createDataCard({ webformatURL, tags, likes, views, comments, downloads}) {
+// console.log(data)
+
+//  return `<a href="${largeImageURL}">
+//  <div class="photo-card">
+//  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+//  <div class="info">
+//    <p class="info-item">
+//      <b>Likes</b>
+//      ${likes}
+//    </p>
+//    <p class="info-item">
+//      <b>Views</b>
+//      ${views}
+//    </p>
+//    <p class="info-item">
+//      <b>Comments</b>
+//      ${comments}
+//    </p>
+//    <p class="info-item">
+//      <b>Downloads</b>
+//      ${downloads}
+//    </p>
+//  </div>
+//  </div>
+// </a>`
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+//  `<div class="photo-card">
+//  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+//  <div class="info">
+//    <p class="info-item">
+//      <b>Likes</b>
+//      ${likes}
+//    </p>
+//    <p class="info-item">
+//      <b>Views</b>
+//      ${views}
+//    </p>
+//    <p class="info-item">
+//      <b>Comments</b>
+//      ${comments}
+//    </p>
+//    <p class="info-item">
+//      <b>Downloads</b>
+//      ${downloads}
+//    </p>
+//  </div>
+// </div>`
+
+
+// }
 
 // function createDataCards({ webformatURL, views, comments, downloads }) {
 //   return `<div class="gallery">
