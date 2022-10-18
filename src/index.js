@@ -16,27 +16,40 @@ function fetchData(data) {
   return fetch(URL).then(responce => responce.json());
 }
 
-refs.input.addEventListener('input', searchInfo);
+refs.input.addEventListener('input', onClickBtnSubmit);
 
-function searchInfo(e) {
-  e.preventDefault();
-  console.log(e)
+function onClickBtnSubmit(event) {
+  event.preventDefault();
 
-  const value = e.target.value.toLowerCase().trim();
-    
-  fetchData(value)
-    .then(renderCards)
-    .then(data => console.log(data))
-    .catch(error => {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.',
-      );
-    });
+  const inputData = event.target.value.toLowerCase().trim();
+
+  if (!inputData) {
+    refs.gallery.innerHTML = "";
+    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.',
+    );
+    return;
+  } else {
+    fetchData(inputData)
+    .then(inputData => console.log(inputData))
+    .then(checkResponse)
+    .then(error => console.log(error));
+  }  
 }
 
+function checkResponse(response) {
+  const dataHits = response.data.hits;
+  const totalHits = response.data.totalHits;
+  console.log("dataHits", dataHits)
+  console.log("totalHits", totalHits)
 
-
-
+  if (dataHits.length !== 0) {
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    renderCards(dataHits)
+  } else {
+    gallery.innerHTML = "";
+    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+  }
+}
 
 function renderCards(data) {
   console.log(data)
