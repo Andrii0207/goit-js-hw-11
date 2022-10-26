@@ -35,49 +35,7 @@ const fetchData = async (value, step) => {
 export default fetchData;
 
 // =================================================
-// 4. checkResponce
-
-import createGalleryListMarkup from './renderMarkup';
-import Notiflix from 'notiflix';
-import checkPhotoAmmount from './checkPhotoAmmount';
-import { galleryEl } from './ref';
-
-function checkResponse(response) {
-  const dataHits = response.data.hits;
-  const totalHits = response.data.totalHits;
-  checkPhotoAmmount(response);
-  if (dataHits.length !== 0) {
-    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-    createGalleryListMarkup(dataHits);
-  } else {
-    galleryEl.innerHTML = '';
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-  }
-}
-
-export default checkResponse;
-
-// =================================================
-// 5. checkPhotoAmount
-
-import { loadMoreBtnEl } from './ref';
-
-function checkPhotoAmmount(response) {
-  const photoPerPage = 40;
-  const dataTotalHits = response.data.totalHits;
-  if (dataTotalHits > photoPerPage) {
-    loadMoreBtnEl.classList.remove('is-hidden');
-  } else {
-    loadMoreBtnEl.classList.add('is-hidden');
-  }
-}
-
-export default checkPhotoAmmount;
-
-// =================================================
-// 6. onClickLonBtnSubmit
+// 4. onClickLonBtnSubmit
 
 import Notiflix from 'notiflix';
 import { galleryEl, loadMoreBtnEl } from './ref';
@@ -115,34 +73,34 @@ function onClickAddPage() {
 }
 
 export { onClickLonBtnSubmit, onClickAddPage };
-
+  
 // =================================================
-// 7. onClickLoadMore
+// 5. checkResponce
 
-import Notiflix from 'notiflix';
-import { galleryEl, loadMoreBtnEl } from './ref';
 import createGalleryListMarkup from './renderMarkup';
-import endlessScroll from './endlessScroll';
+import Notiflix from 'notiflix';
+import checkPhotoAmmount from './checkPhotoAmmount';
+import { galleryEl } from './ref';
 
-function onClickLoadMore(response, step) {
-  const dataTotalPhoto = response.data.totalHits;
-  const dataTotalImg = response.data.hits;
-  const totalPages = dataTotalPhoto / 40;
-
-  if (step > totalPages) {
-    loadMoreBtnEl.classList.add('is-hidden');
-    Notiflix.Notify.info(
-      "We're sorry, but you've reached the end of search results."
+function checkResponse(response) {
+  const dataHits = response.data.hits;
+  const totalHits = response.data.totalHits;
+  checkPhotoAmmount(response);
+  if (dataHits.length !== 0) {
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    createGalleryListMarkup(dataHits);
+  } else {
+    galleryEl.innerHTML = '';
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
     );
   }
-  createGalleryListMarkup(dataTotalImg);
-  endlessScroll(galleryEl);
 }
 
-export default onClickLoadMore;
+export default checkResponse;
 
 // =================================================
-// 8. renderMarkUp
+// 6. renderMarkUp
 
 import { galleryEl } from './ref';
 import SimpleLightbox from 'simplelightbox';
@@ -185,6 +143,50 @@ const createGalleryListMarkup = gallery => {
 };
 
 export default createGalleryListMarkup;
+
+// =================================================
+// 7. onClickLoadMore
+
+import Notiflix from 'notiflix';
+import { galleryEl, loadMoreBtnEl } from './ref';
+import createGalleryListMarkup from './renderMarkup';
+import endlessScroll from './endlessScroll';
+
+function onClickLoadMore(response, step) {
+  const dataTotalPhoto = response.data.totalHits;
+  const dataTotalImg = response.data.hits;
+  const totalPages = dataTotalPhoto / 40;
+
+  if (step > totalPages) {
+    loadMoreBtnEl.classList.add('is-hidden');
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
+  createGalleryListMarkup(dataTotalImg);
+  endlessScroll(galleryEl);
+}
+
+export default onClickLoadMore;
+
+// =================================================
+// 8. checkPhotoAmount
+
+import { loadMoreBtnEl } from './ref';
+
+function checkPhotoAmmount(response) {
+  const photoPerPage = 40;
+  const dataTotalHits = response.data.totalHits;
+  if (dataTotalHits > photoPerPage) {
+    loadMoreBtnEl.classList.remove('is-hidden');
+  } else {
+    loadMoreBtnEl.classList.add('is-hidden');
+  }
+}
+
+export default checkPhotoAmmount;
+
+
 
 // =================================================
 // 9. endLessScroll
